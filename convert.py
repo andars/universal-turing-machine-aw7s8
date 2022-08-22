@@ -16,6 +16,18 @@ bb3_transitions = {
     ('Z', '1'): ('1', 'L', 'X'),
 }
 
+bb4_states = ['W', 'X', 'Y', 'Z']
+bb4_transitions = {
+    ('W', '0'): ('1', 'R', 'X'),
+    ('W', '1'): ('1', 'L', 'X'),
+    ('X', '0'): ('1', 'L', 'W'),
+    ('X', '1'): ('0', 'L', 'Y'),
+    ('Y', '0'): ('1', 'R', 'h'),
+    ('Y', '1'): ('1', 'L', 'Z'),
+    ('Z', '0'): ('1', 'R', 'Z'),
+    ('Z', '1'): ('0', 'R', 'W'),
+}
+
 def encode_ia_entry(state, symbol, transitions, num_zeros):
     ss = (state, symbol)
     d = '0' if transitions[ss][1] == 'R' else '1'
