@@ -97,12 +97,19 @@ def encode(states, transitions):
     print(i_region)
 
     cvt = {'1': '1', '0': '*'}
+    ib_region_desc = '{'
+    for entry in ib_entries:
+        ib_region_desc += '[' + entry[0][0] + entry[0][1] + ' '*(len(entry[1])-4) + ']'
+    ib_region_desc += '}'
+    ia_region_desc = ''
+    for entry in ia_entries:
+        ia_region_desc += '[' + entry[0][0] + entry[0][1] + ' '*(len(entry[1])-4) + ']'
     ib_region = '*' + ''.join(''.join([cvt[c] for c in e[1]]) for e in ib_entries) + '0'
     i_region = ib_region + ia_region
     print()
     print(i_region)
 
-    return i_region
+    return i_region, ib_region_desc + ia_region_desc
 
 if __name__ == '__main__':
     encode(bb3_states, bb3_transitions)
