@@ -50,6 +50,7 @@ def encode(states, transitions):
             if next_state in states:
                 next_state_index = states.index(next_state)
             else:
+                assert next_state == 'h'
                 next_state_index = len(states)
             num_zeros_ib = 3 * next_state_index + 1
             num_zeros = num_zeros_ib + num_zeros_ia
