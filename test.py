@@ -1,4 +1,4 @@
-# configuration = (state, position)
+import convert
 
 transitions = {
     ('A', '0'): ( '*', 'L',  'B'),
@@ -78,41 +78,56 @@ def print_transitions():
     #    pass
 
 
-tape = '**111*111*011101110010101010101000101010110000101001'
-INIT_LEN = len(tape)
 
-tape += '0'*5
+tape, desc = convert.encode(convert.bb3_states, convert.bb3_transitions)
+INIT_LEN = len(tape)
+tape += '0'*20
 tape = list(tape)
 
 def next(state, sym):
     return transitions[(state, sym)]
 
 def print_machine(i, state, pos):
+    LINE_LEN = 100
+    num_lines = (len(tape) + LINE_LEN - 1)//LINE_LEN
+    pos_str = ' '*pos + '^'
+    state_str = ' '*pos + state
     print(i)
-    print(''.join(tape))
-    print(' '*(pos-1), '^')
-    print(' '*(pos-1), state)
+    print("state: {}, pos: {}".format(state, pos))
+    for l in range(num_lines):
+        start = l * LINE_LEN
+        end = start + LINE_LEN
+        print(desc[start:end])
+        print(''.join(tape[start:end]))
+        print(pos_str[start:end])
+        print(state_str[start:end])
+    print('='*LINE_LEN)
 
 def main():
     check_transitions()
     print_transitions()
 
     state = 'A'
-    pos = INIT_LEN - 1
+    pos = INIT_LEN+5
+    print("tape: ", len(tape))
     print_machine('init', state, pos)
 
-    for i in range(200):
+    for i in range(10000000):
         sym, move, next_state = next(state, tape[pos])
         if sym:
-            print(sym)
             tape[pos] = sym
         if move == 'L':
             pos -= 1
         else:
             pos += 1
 
+        if pos < 0:
+            print("halt", i)
+            break
+
         if next_state:
+            print('{}: {} => {}'.format(sym, state, next_state))
             state = next_state
-        print_machine(i, state, pos)
-        
+            print_machine(i, state, pos)
+
 main()
