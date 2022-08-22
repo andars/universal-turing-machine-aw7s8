@@ -73,6 +73,7 @@ def encode(states, transitions):
 
     for state in states[::-1]:
         for sym in ['1', '0']:
+            print("encoding ", state, sym)
             state_index = states.index(state)
             num_zeros_ib = state_index * 3 + 1
             if sym == '1':
@@ -83,9 +84,9 @@ def encode(states, transitions):
                 if entry[0] == (state, sym):
                     break
                 num_zeros_ia += entry[2]
-            print('zeros: ib: {}, ia: {}'.format(num_zeros_ib, num_zeros_ia))
+            num_zeros = num_zeros_ia + num_zeros_ib + 1
+            print('zeros: ib: {}, ia: {}, total: {}'.format(num_zeros_ib, num_zeros_ia, num_zeros))
 
-            num_zeros = num_zeros_ia + num_zeros_ib
             ib_entry = encode_ib_entry(sym, num_zeros)
             print(ib_entry)
             ib_entries += [((state, sym), ib_entry)]
