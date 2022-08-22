@@ -26,8 +26,11 @@ def encode_ia_entry(state, symbol, transitions, num_zeros):
 # Ib = '0' + '1'*b1 + '0' + '1'*b0 + '0'
 # print("Ib entry: ", Ib)
 
-def encode_ib_entry(num_zeros):
-    return '1' * num_zeros + '0'
+def encode_ib_entry(sym, num_zeros):
+    entry = '1' * num_zeros + '0'
+    if sym == '1':
+        entry = '0' + entry
+    return entry
 
 def encode(states, transitions):
     print('encoding Ia')
@@ -79,19 +82,27 @@ def encode(states, transitions):
             for entry in ia_entries:
                 if entry[0] == (state, sym):
                     break
-                print(entry)
                 num_zeros_ia += entry[2]
             print('zeros: ib: {}, ia: {}'.format(num_zeros_ib, num_zeros_ia))
 
             num_zeros = num_zeros_ia + num_zeros_ib
-            ib_entry = encode_ib_entry(num_zeros)
-            ib_entries += [(state, sym), ib_entry]
+            ib_entry = encode_ib_entry(sym, num_zeros)
+            print(ib_entry)
+            ib_entries += [((state, sym), ib_entry)]
 
     ib_region = '0' + ''.join(e[1] for e in ib_entries) + '0'
     ia_region = ''.join(e[1] for e in ia_entries)
     i_region = ib_region + ia_region
     print()
     print(i_region)
+
+    cvt = {'1': '1', '0': '*'}
+    ib_region = '*' + ''.join(''.join([cvt[c] for c in e[1]]) for e in ib_entries) + '0'
+    i_region = ib_region + ia_region
+    print()
+    print(i_region)
+
+    return i_region
 
 if __name__ == '__main__':
     encode(bb3_states, bb3_transitions)
