@@ -1,7 +1,18 @@
 module tb_user_module();
 
-reg [7:0] inputs;
+
+wire [7:0] inputs;
 wire [7:0] outputs;
+
+reg [2:0] state_in;
+wire [2:0] next_state;
+
+reg [2:0] sym_in;
+wire [2:0] new_sym;
+
+assign inputs = {state_in, sym_in, 2'b0};
+assign next_state = outputs[7:5];
+assign new_sym = outputs[4:2];
 
 user_module_PROJECT_ID um(
     .io_in(inputs),
@@ -11,13 +22,47 @@ user_module_PROJECT_ID um(
 integer i;
 initial begin
     $dumpvars;
+    sym_in = 3'b0;
     #10;
     for (i = 0; i < 8; i = i + 1) begin
-        inputs = (1 << i);
+        state_in = i;
+
+        sym_in = 3'b000;
         #10;
-        $display("in 0b%b (%c)-> out 0b%b (%c)", inputs, "A" + $clog2(inputs),
-                                                outputs, "A" + $clog2(outputs));
+        $display("in 0b%b -> out 0b%b", inputs, outputs);
+        $display("  state %c + symbol %b", "A" + state_in, sym_in);
+        $display("  -> next state %c", "A" + next_state);
         #10;
+
+        sym_in = 3'b001;
+        #10;
+        $display("in 0b%b -> out 0b%b", inputs, outputs);
+        $display("  state %c + symbol %b", "A" + state_in, sym_in);
+        $display("  -> next state %c", "A" + next_state);
+        #10;
+
+        sym_in = 3'b010;
+        #10;
+        $display("in 0b%b -> out 0b%b", inputs, outputs);
+        $display("  state %c + symbol %b", "A" + state_in, sym_in);
+        $display("  -> next state %c", "A" + next_state);
+        #10;
+
+        sym_in = 3'b100;
+        #10;
+        $display("in 0b%b -> out 0b%b", inputs, outputs);
+        $display("  state %c + symbol %b", "A" + state_in, sym_in);
+        $display("  -> next state %c", "A" + next_state);
+        #10;
+
+        sym_in = 3'b101;
+        #10;
+        $display("in 0b%b -> out 0b%b", inputs, outputs);
+        $display("  state %c + symbol %b", "A" + state_in, sym_in);
+        $display("  -> next state %c", "A" + next_state);
+        #10;
+
+        $display;
     end
 end
 
