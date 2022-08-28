@@ -10,9 +10,12 @@ wire [2:0] next_state;
 reg [2:0] sym_in;
 wire [2:0] new_sym;
 
+wire direction;
+
 assign inputs = {state_in, sym_in, 2'b0};
 assign next_state = outputs[7:5];
 assign new_sym = outputs[4:2];
+assign direction = outputs[1];
 
 user_module_PROJECT_ID um(
     .io_in(inputs),
@@ -32,6 +35,7 @@ initial begin
         $display("in 0b%b -> out 0b%b", inputs, outputs);
         $display("  state %c + symbol %b", "A" + state_in, sym_in);
         $display("  -> next state %c", "A" + next_state);
+        $display("  -> direction %b", direction);
         #10;
 
         sym_in = 3'b001;
@@ -39,6 +43,7 @@ initial begin
         $display("in 0b%b -> out 0b%b", inputs, outputs);
         $display("  state %c + symbol %b", "A" + state_in, sym_in);
         $display("  -> next state %c", "A" + next_state);
+        $display("  -> direction %b", direction);
         #10;
 
         sym_in = 3'b010;
@@ -46,6 +51,7 @@ initial begin
         $display("in 0b%b -> out 0b%b", inputs, outputs);
         $display("  state %c + symbol %b", "A" + state_in, sym_in);
         $display("  -> next state %c", "A" + next_state);
+        $display("  -> direction %b", direction);
         #10;
 
         sym_in = 3'b100;
@@ -53,6 +59,7 @@ initial begin
         $display("in 0b%b -> out 0b%b", inputs, outputs);
         $display("  state %c + symbol %b", "A" + state_in, sym_in);
         $display("  -> next state %c", "A" + next_state);
+        $display("  -> direction %b", direction);
         #10;
 
         sym_in = 3'b101;
@@ -60,6 +67,7 @@ initial begin
         $display("in 0b%b -> out 0b%b", inputs, outputs);
         $display("  state %c + symbol %b", "A" + state_in, sym_in);
         $display("  -> next state %c", "A" + next_state);
+        $display("  -> direction %b", direction);
         #10;
 
         $display;
