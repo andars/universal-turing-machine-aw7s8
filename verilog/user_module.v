@@ -37,6 +37,17 @@ next_state_PROJECT_ID next_state_block(
     .s0(sym_in[0]),
     .state_out(state_out));
 
+new_symbol_PROJECT_ID new_sym_block(
+    .state_in(state_in),
+    .s2(sym_in[2]),
+    .s1(sym_in[1]),
+    .s0(sym_in[0]),
+    .z2(new_sym[2]),
+    .z1(new_sym[1]),
+    .z0(new_sym[0])
+);
+
+
 encoder_8to3_PROJECT_ID encode_state_out(
     .in(state_out),
     .out(encoded_state_out)
