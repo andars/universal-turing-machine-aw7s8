@@ -20,7 +20,6 @@ assign encoded_state_in = io_in[7:5];
 assign io_out[7:5] = encoded_state_out;
 
 assign sym_in = io_in[4:2];
-assign new_sym = 3'b0; // TODO
 assign io_out[4:2] = new_sym;
 
 assign io_out[1:0] = 2'b0;
