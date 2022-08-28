@@ -25,5 +25,9 @@ harden:
 	/bin/bash -c "./flow.tcl -overwrite -design /work/src -run_path /work/runs -tag wokwi"
 
 $(PROCESSED_VERILOG_FILES): src/%_$(WOKWI_PROJECT_ID).v: verilog/%.v
+	mkdir -p src
 	sed -e 's/PROJECT_ID/$(WOKWI_PROJECT_ID)/g' $< > $@
 
+.PHONY: clean
+clean:
+	rm -rf src
