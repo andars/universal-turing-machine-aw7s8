@@ -4,7 +4,7 @@ reg [7:0] state;
 reg [2:0] sym;
 wire [2:0] new_sym;
 
-new_symbol newsym(
+new_symbol_PROJECT_ID newsym(
     .state_in(state),
     .s2(sym[2]),
     .s1(sym[1]),

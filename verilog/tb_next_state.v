@@ -4,7 +4,7 @@ reg [7:0] state;
 wire [7:0] state_next;
 reg [2:0] sym;
 
-next_state ns(
+next_state_PROJECT_ID ns(
     .state_in(state),
     .s2(sym[2]),
     .s1(sym[1]),

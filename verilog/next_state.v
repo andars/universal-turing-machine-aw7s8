@@ -1,5 +1,5 @@
 `default_nettype none
-module next_state(
+module next_state_PROJECT_ID(
     input [7:0] state_in,
     input s2,
     input s1,

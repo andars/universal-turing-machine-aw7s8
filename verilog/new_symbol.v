@@ -1,5 +1,5 @@
 `default_nettype none
-module new_symbol(
+module new_symbol_PROJECT_ID(
     input [7:0] state_in,
     input s2,
     input s1,
