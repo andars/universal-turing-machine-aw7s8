@@ -2,4 +2,5 @@ a.out
 *.vcd
 /verilog/build
 __pycache__
+/src
 
