@@ -5,8 +5,19 @@ module user_module_341174563322724948(
   output [7:0] io_out
 );
 
-// TODO
-assign io_out[0] = ~io_in[0];
-assign io_out[1] = ~io_in[0];
+wire [2:0] sym;
+wire [7:0] state_in;
+wire [7:0] state_out;
+
+assign state_in = io_in;
+assign sym = 3'b0;
+assign io_out = state_out;
+
+next_state_341174563322724948 next_state_block(
+    .state_in(state_in),
+    .s2(sym[2]),
+    .s1(sym[1]),
+    .s0(sym[0]),
+    .state_out(state_out));
 
 endmodule
