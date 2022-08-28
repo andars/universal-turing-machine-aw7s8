@@ -11,4 +11,5 @@ endef
 
 $(eval $(call VERILOG_SIM_RULE,new-symbol,new_symbol.v tb_new_symbol.v))
 $(eval $(call VERILOG_SIM_RULE,next-state,next_state.v tb_next_state.v))
+$(eval $(call VERILOG_SIM_RULE,3to8,decoder_3to8.v tb_decoder_3to8.v))
 
