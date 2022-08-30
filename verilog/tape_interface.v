@@ -15,8 +15,11 @@ reg [1:0] seq;
 reg write_enable;
 reg move_enable;
 
+reg [31:0] cycle_count;
+
 initial begin
     $readmemb("bb2.tape", tape);
+    cycle_count = 0;
 end
 
 always @(posedge clock) begin
@@ -54,6 +57,14 @@ assign sym = tape[position];
 
 always @(posedge clock) begin
     if (reset) begin
+        cycle_count <= 0;
+    end else if (move_enable) begin
+        cycle_count <= cycle_count + 1;
+    end
+end
+
+always @(posedge clock) begin
+    if (reset) begin
         seq <= 0;
     end
     else begin
@@ -62,10 +73,14 @@ always @(posedge clock) begin
         end
         else if (seq == 2'b01) begin
             seq <= 2'b10;
-
         end
         else if (seq == 2'b10) begin
-            seq <= 2'b00;
+            if (position == 0) begin
+                // halt
+                seq <= 2'b11;
+            end else begin
+                seq <= 2'b00;
+            end
         end
         else if (seq == 2'b11) begin
             seq <= 2'b11;

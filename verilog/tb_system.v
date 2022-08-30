@@ -46,4 +46,11 @@ always begin
     #10 clock = ~clock;
 end
 
+always @(tif.seq) begin
+    if (tif.seq == 2'b11) begin
+        $display("halted after %d cycles", tif.cycle_count);
+        $finish;
+    end
+end
+
 endmodule
