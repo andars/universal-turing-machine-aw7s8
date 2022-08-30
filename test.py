@@ -129,6 +129,7 @@ def main():
 
         if pos < 0:
             print("halt", i)
+            print(''.join(tape[INIT_LEN:]))
             break
 
         if next_state:
