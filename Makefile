@@ -2,7 +2,7 @@
 
 WOKWI_PROJECT_ID=341174563322724948
 
-VERILOG_FILES = direction.v next_state.v new_symbol.v decoder_3to8.v encoder_8to3.v user_module.v
+VERILOG_FILES = core.v direction.v next_state.v new_symbol.v decoder_3to8.v encoder_8to3.v user_module.v
 PROCESSED_VERILOG_FILES = $(patsubst %.v,src/%_$(WOKWI_PROJECT_ID).v,$(VERILOG_FILES))
 $(info processed verilog files: $(PROCESSED_VERILOG_FILES))
 

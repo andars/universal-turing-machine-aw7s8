@@ -37,39 +37,16 @@ assign io_out[4:2] = new_sym;
 assign io_out[1] = direction;
 assign io_out[0] = 1'b0;
 
-decoder_3to8_PROJECT_ID decode_state_in(
-    .in(encoded_state_in),
-    .out(state_in)
-);
-
-direction_PROJECT_ID direction_block(
-    .state(state_in),
-    .s2(sym_in[2]),
-    .s1(sym_in[1]),
-    .s0(sym_in[0]),
-    .direction(direction)
-);
-
-next_state_PROJECT_ID next_state_block(
-    .state_in(state_in),
-    .s2(sym_in[2]),
-    .s1(sym_in[1]),
-    .s0(sym_in[0]),
-    .state_out(state_out));
-
-new_symbol_PROJECT_ID new_sym_block(
-    .state_in(state_in),
-    .s2(sym_in[2]),
-    .s1(sym_in[1]),
-    .s0(sym_in[0]),
-    .z2(new_sym[2]),
-    .z1(new_sym[1]),
-    .z0(new_sym[0])
-);
-
-encoder_8to3_PROJECT_ID encode_state_out(
-    .in(state_out),
-    .out(encoded_state_out)
+utm_core_PROJECT_ID core(
+    .clock(clock),
+    .reset(reset),
+    .mode(mode),
+    .encoded_state_in(encoded_state_in),
+    .sym_in(sym_in),
+    .sym_in_valid(sym_valid),
+    .new_sym(new_sym),
+    .direction(direction),
+    .encoded_next_state(encoded_state_out)
 );
 
 endmodule
