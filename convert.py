@@ -1,3 +1,5 @@
+import argparse
+
 bb2_states = ['X', 'Y']
 bb2_transitions = {
     ('X', '0'): ('1', 'R', 'Y'),
@@ -134,5 +136,38 @@ def encode(states, transitions):
     return i_region, ib_region_desc + ia_region_desc
 
 if __name__ == '__main__':
-    encode(bb3_states, bb3_transitions)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--readmemb-output", help="output file for readmemb")
+    parser.add_argument("--machine", help="specify machine to encode")
+    parser.add_argument("--readmemb-len", help="length of readmemb file")
+    args = parser.parse_args()
+
+    states, transitions = bb3_states, bb3_transitions
+
+    if args.machine == 'bb2':
+        print('bb2')
+        states, transitions = bb2_states, bb2_transitions
+    elif args.machine == 'bb3':
+        print('bb3')
+        states, transitions = bb3_states, bb3_transitions
+    elif args.machine == 'bb4':
+        print('bb4')
+        states, transitions = bb4_states, bb4_transitions
+
+    tape, desc = encode(states, transitions)
+
+    if args.readmemb_output:
+        with open(args.readmemb_output, 'w') as f:
+            for i in range(int(args.readmemb_len)):
+                sym = tape[i] if i < len(tape) else '0'
+                sym_map = {
+                    '0': '000',
+                    '1': '001',
+                    '*': '010',
+                    'o': '100',
+                    'i': '101'
+                }
+                f.write("{}\n".format(sym_map[sym]))
+        print("wrote tape to {}".format(args.readmemb_output))
+        print("encoded length {}, total length {}".format(len(tape), args.readmemb_len))
 
