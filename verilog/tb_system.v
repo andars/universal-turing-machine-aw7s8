@@ -25,14 +25,19 @@ utm_core_PROJECT_ID core(
     .direction(direction)
 );
 
+integer i;
+
 initial begin
     $dumpvars;
+    for (i = 0; i < 512; i++) begin
+        $dumpvars(0, tif.tape[i]);
+    end
     clock = 0;
     reset = 1;
     repeat(5) @(posedge clock);
     @(negedge clock);
     reset = 0;
-    repeat(50) @(posedge clock);
+    repeat(250000) @(posedge clock);
 
     $finish;
 end

@@ -7,13 +7,17 @@ module tape_interface(
     output reg sym_valid
 );
 
-reg [3:0] tape[511:0];
+reg [2:0] tape[511:0];
 
 reg [8:0] position;
 
 reg [1:0] seq;
 reg write_enable;
 reg move_enable;
+
+initial begin
+    $readmemb("bb2.tape", tape);
+end
 
 always @(posedge clock) begin
     if (reset) begin
@@ -34,9 +38,11 @@ end
 integer i;
 always @(posedge clock) begin
     if (reset) begin
+        /*
         for (i = 0; i < 512; i = i + 1) begin
             tape[i] <= 0;
         end
+        */
     end
     else begin
         if (write_enable) begin
