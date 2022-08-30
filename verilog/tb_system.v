@@ -6,6 +6,7 @@ wire direction;
 wire [2:0] new_sym;
 wire [2:0] sym;
 wire sym_valid;
+wire [2:0] encoded_next_state;
 
 tape_interface tif(
     .clock(clock),
@@ -19,10 +20,13 @@ tape_interface tif(
 utm_core_PROJECT_ID core(
     .clock(clock),
     .reset(reset),
+    .mode(1'b1),
+    .encoded_state_in(3'b0),
     .sym_in(sym),
-    .sym_valid(sym_valid),
+    .sym_in_valid(sym_valid),
     .new_sym(new_sym),
-    .direction(direction)
+    .direction(direction),
+    .encoded_next_state(encoded_next_state)
 );
 
 integer i;
