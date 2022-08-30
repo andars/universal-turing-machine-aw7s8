@@ -1,3 +1,4 @@
+import argparse
 import convert
 
 transitions = {
@@ -79,7 +80,7 @@ def print_transitions():
 
 
 
-tape, desc = convert.encode(convert.bb3_states, convert.bb3_transitions)
+tape, desc = convert.encode(convert.bb2_states, convert.bb2_transitions)
 INIT_LEN = len(tape)
 tape += '0'*20
 tape = list(tape)
@@ -104,6 +105,11 @@ def print_machine(i, state, pos):
     print('='*LINE_LEN)
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--simulated-only", help='print only simulated tape',
+                        action='store_true')
+    args = parser.parse_args()
+
     check_transitions()
     print_transitions()
 
@@ -126,8 +132,15 @@ def main():
             break
 
         if next_state:
-            print('{}: {} => {}'.format(sym, state, next_state))
+            prev_state = state
             state = next_state
-            print_machine(i, state, pos)
+            if args.simulated_only:
+                if (prev_state == 'A') and ((next_state == 'B') or (next_state == 'C')):
+                    print('{}: {} => {}'.format(sym, prev_state, next_state))
+                    print(''.join(tape[INIT_LEN:]))
+            else:
+                print('{}: {} => {}'.format(sym, prev_state, next_state))
+                print_machine(i, state, pos)
 
-main()
+if __name__ == '__main__':
+    main()
