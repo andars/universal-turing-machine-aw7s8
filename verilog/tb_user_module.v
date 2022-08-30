@@ -12,7 +12,7 @@ wire [2:0] new_sym;
 
 wire direction;
 
-assign inputs = {state_in, sym_in, 2'b0};
+assign inputs = {1'b0, sym_in, state_in, 1'b0};
 assign next_state = outputs[7:5];
 assign new_sym = outputs[4:2];
 assign direction = outputs[1];
