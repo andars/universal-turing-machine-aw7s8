@@ -1,4 +1,5 @@
 import argparse
+import sim
 import convert
 
 transitions = {
@@ -7,48 +8,73 @@ transitions = {
     ('A', '*'): (None, 'R', None),
     ('A', 'o'): ( '0', 'L',  'E'),
     ('A', 'i'): ( '1', 'R', None),
+    #
+    ('A', ';'): ( '1', 'R', None),
+    ('A', ':'): ( ':', 'R', None),
 
     ('B', '0'): ( 'o', 'L', None),
     ('B', '1'): ( 'i', 'L', None),
     ('B', '*'): ( 'o', 'L',  'D'),
     ('B', 'o'): ( '0', 'R',  'G'),
     ('B', 'i'): ( '1', 'R',  'H'),
+    #
+    ('B', ';'): ( ';', 'L',  'B'),
+    ('B', ':'): ( ';', 'L',  'B'),
 
     ('C', '0'): ( 'o', 'L', None),
     ('C', '1'): ( 'i', 'L', None),
     ('C', '*'): ( 'o', 'L',  'B'),
     ('C', 'o'): (None, 'R',  'G'),
     ('C', 'i'): (None, 'R',  'H'),
+    #
+    ('C', ';'): (None, 'L', None),
+    ('C', ':'): ( ';', 'L', None),
 
     ('D', '0'): (None, 'R',  'C'),
     ('D', '1'): ( 'i', 'R',  'E'),
     ('D', '*'): (None, 'R',  'A'),
     ('D', 'o'): ( '*', 'L', None),
     ('D', 'i'): (None, 'L', None),
+    #
+    ('D', ';'): (None, 'L', None),
+    ('D', ':'): (None, 'L', None),
     
     ('E', '0'): (None, 'R',  'D'),
     ('E', '1'): ( 'i', 'L',  'F'),
     ('E', '*'): ( 'o', 'R', None),
-    ('E', 'o'): ( '*', 'L',  'D'),
+    ('E', 'o'): (None, 'R', None),
+    #('E', 'o'): ( '*', 'L',  'D'),
     ('E', 'i'): (None, 'R', None),
+    #
+    ('E', ';'): ( ':', 'L',  'D'),
+    ('E', ':'): ( ':', 'R', None),
 
     ('F', '0'): ( 'o', 'L', None),
     ('F', '1'): ( 'i', 'L', None),
-    ('F', '*'): ( '0', 'R',  'G'),
+    ('F', '*'): ( 'o', 'L', None),
     ('F', 'o'): ( '0', 'R',  'B'),
     ('F', 'i'): ( '1', 'R',  'B'),
+    #
+    ('F', ';'): ( ';', 'L', None),
+    ('F', ':'): ( ';', 'R',  'G'),
 
     ('G', '0'): (None, 'R',  'A'),
     ('G', '1'): (None, 'R',  'A'),
     ('G', '*'): ( '0', 'L',  'F'),
     ('G', 'o'): ( '0', 'R', None),
     ('G', 'i'): ( '1', 'R', None),
+    
+    ('G', ';'): ( ';', 'R', None),
+    ('G', ':'): ( ':', 'R', None),
 
     ('H', '0'): (None, 'L',  'A'),
     ('H', '1'): (None, 'L',  'A'),
     ('H', '*'): ( '1', 'L',  'F'),
     ('H', 'o'): ( '0', 'R', None),
     ('H', 'i'): ( '1', 'R', None),
+    #
+    ('H', ';'): ( ';', 'R', None),
+    ('H', ':'): ( '1', 'R', None),
 }
     
 def check_transitions():
@@ -80,13 +106,16 @@ def print_transitions():
 
 
 
-tape, desc = convert.encode(convert.bb2_states, convert.bb2_transitions)
+sim_states, sim_transitions = convert.bb2_states, convert.bb2_transitions
+tape, desc = convert.encode(sim_states, sim_transitions)
 INIT_LEN = len(tape)
-tape += '0'*20
+tape += '0'*30
 tape = list(tape)
 
 def next(state, sym):
-    return transitions[(state, sym)]
+    t = transitions[(state, sym)]
+    print((state, sym), '->', t)
+    return t
 
 def print_machine(i, state, pos):
     LINE_LEN = 100
@@ -111,14 +140,17 @@ def main():
     args = parser.parse_args()
 
     check_transitions()
+    print("UNIVERSAL MACHINE")
     print_transitions()
+    print("SIMULATED MACHINE")
+    sim.print_transitions(sim_states, sim_transitions)
 
     state = 'A'
-    pos = INIT_LEN+5
+    pos = INIT_LEN+15
     print("tape: ", len(tape))
     print_machine('init', state, pos)
 
-    for i in range(10000000):
+    for i in range(1000000):
         sym, move, next_state = next(state, tape[pos])
         if sym:
             tape[pos] = sym
@@ -132,6 +164,9 @@ def main():
             print(''.join(tape[INIT_LEN:]))
             break
 
+        #print('{}: {} => {}'.format(sym, state, next_state))
+        #print_machine(i, state, pos)
+
         if next_state:
             prev_state = state
             state = next_state
@@ -142,6 +177,8 @@ def main():
             else:
                 print('{}: {} => {}'.format(sym, prev_state, next_state))
                 print_machine(i, state, pos)
+            #input()
+
 
 if __name__ == '__main__':
     main()

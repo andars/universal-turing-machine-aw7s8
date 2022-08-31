@@ -30,17 +30,17 @@ bb4_transitions = {
     ('Z', '1'): ('0', 'R', 'W'),
 }
 
-def encode_ia_entry(state, symbol, transitions, num_zeros):
+def encode_ia_entry(state, symbol, transitions, num_semicolons):
     ss = (state, symbol)
     d = '0' if transitions[ss][1] == 'R' else '1'
     n = '0' if transitions[ss][0] == '0' else '1'
-    ia_entry = '0' + n + d + '0'
-    ia_entry = '10'*num_zeros + ia_entry
+    ia_entry = '0' + n + d + ';'
+    ia_entry = '10'*num_semicolons + ia_entry
     print("{} => {}".format(ss, transitions[ss]))
     print("Ia entry: ", ia_entry);
     return ia_entry
 
-# number of zeros between (qi, sj) in Ib and (qi, sj) in Ia
+# number of semicolons between (qi, sj) in Ib and (qi, sj) in Ia
 # 
 # b0 = 1
 # b1 = 1
@@ -48,15 +48,15 @@ def encode_ia_entry(state, symbol, transitions, num_zeros):
 # Ib = '0' + '1'*b1 + '0' + '1'*b0 + '0'
 # print("Ib entry: ", Ib)
 
-def encode_ib_entry(sym, num_zeros):
-    entry = '1' * num_zeros + '0'
+def encode_ib_entry(sym, num_semicolons):
+    entry = '1' * num_semicolons + '0;'
     if sym == '1':
-        entry = '0' + entry
+        entry = ';' + entry
     return entry
 
 def encode(states, transitions):
     print('encoding Ia')
-    num_zeros_ia = 0
+    num_semicolons_ia = 0
     ia_entries = []
     for state in states[::-1]:
         for sym in ['1', '0']:
@@ -66,18 +66,18 @@ def encode(states, transitions):
             else:
                 assert next_state == 'h'
                 next_state_index = len(states)
-            num_zeros_ib = 3 * next_state_index + 1
-            num_zeros = num_zeros_ib + num_zeros_ia
+            num_semicolons_ib = next_state_index * 3
+            num_semicolons = num_semicolons_ib + num_semicolons_ia + 1
             print(state, sym, next_state)
-            print('zeros: ib: {}, ia: {}'.format(num_zeros_ib, num_zeros_ia))
-            ia_entry = encode_ia_entry(state, sym, transitions, num_zeros)
+            print('semicolons: ib: {}, ia: {}, total: {}'.format(num_semicolons_ib, num_semicolons_ia, num_semicolons))
+            ia_entry = encode_ia_entry(state, sym, transitions, num_semicolons)
 
             num_zeros_in_entry = 0
             for c in ia_entry:
                 if c == '0': num_zeros_in_entry += 1
 
             ia_entries += [((state, sym), ia_entry, num_zeros_in_entry)]
-            num_zeros_ia += num_zeros_in_entry
+            num_semicolons_ia += 1
 
 
     print(ia_entries)
@@ -98,29 +98,31 @@ def encode(states, transitions):
         for sym in ['1', '0']:
             print("encoding ", state, sym)
             state_index = states.index(state)
-            num_zeros_ib = state_index * 3 + 1
+            num_semicolons_ib = 3 * state_index + 1
             if sym == '1':
-                num_zeros_ib += 1
+                num_semicolons_ib += 1
 
-            num_zeros_ia = 0
+            num_semicolons_ia = 0
             for entry in ia_entries:
                 if entry[0] == (state, sym):
                     break
-                num_zeros_ia += entry[2]
-            num_zeros = num_zeros_ia + num_zeros_ib + 1
-            print('zeros: ib: {}, ia: {}, total: {}'.format(num_zeros_ib, num_zeros_ia, num_zeros))
+                num_semicolons_ia += 1
+            num_semicolons = num_semicolons_ia + num_semicolons_ib + 1
+            print('semicolons: ib: {}, ia: {}, total: {}'.format(num_semicolons_ib, num_semicolons_ia, num_semicolons))
 
-            ib_entry = encode_ib_entry(sym, num_zeros)
+            ib_entry = encode_ib_entry(sym, num_semicolons)
             print(ib_entry)
             ib_entries += [((state, sym), ib_entry)]
 
-    ib_region = '0' + ''.join(e[1] for e in ib_entries) + '0'
+    ib_region = '0' + ''.join(e[1] for e in ib_entries) + ';'
     ia_region = ''.join(e[1] for e in ia_entries)
     i_region = ib_region + ia_region
     print()
-    print(i_region)
+    print("IB REGION:", ib_region)
+    print("IA REGION:", ia_region)
+    print("I REGION :", i_region)
 
-    cvt = {'1': '1', '0': '*'}
+    cvt = {'1': '1', '0': '*', ';': ':'}
     ib_region_desc = '{'
     for entry in ib_entries:
         ib_region_desc += '[' + entry[0][0] + entry[0][1] + ' '*(len(entry[1])-4) + ']'
@@ -128,9 +130,10 @@ def encode(states, transitions):
     ia_region_desc = ''
     for entry in ia_entries:
         ia_region_desc += '[' + entry[0][0] + entry[0][1] + ' '*(len(entry[1])-4) + ']'
-    ib_region = '*' + ''.join(''.join([cvt[c] for c in e[1]]) for e in ib_entries) + '0'
+    ib_region = '*' + ''.join(''.join([cvt[c] for c in e[1]]) for e in ib_entries) + ';'
     i_region = ib_region + ia_region
     print()
+    print(ib_region_desc + ia_region_desc)
     print(i_region)
 
     return i_region, ib_region_desc + ia_region_desc
