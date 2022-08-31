@@ -78,4 +78,6 @@ def run(states, transitions):
 
 def main():
     run(convert.bb3_states, convert.bb3_transitions)
-main()
+
+if __name__ == '__main__':
+    main()
