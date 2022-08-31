@@ -37,6 +37,14 @@ initial begin
         sym = 3'b101;
         #10;
         $display("0x%x %c", state_next, "A" + $clog2(state_next));
+        #10;
+        sym = 3'b110;
+        #10;
+        $display("0x%x %c", state_next, "A" + $clog2(state_next));
+        #10;
+        sym = 3'b111;
+        #10;
+        $display("0x%x %c", state_next, "A" + $clog2(state_next));
     end
 end
 
