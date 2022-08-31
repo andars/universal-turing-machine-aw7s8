@@ -42,6 +42,16 @@ initial begin
         #10;
         $display("sym %b -> direction %b", sym, direction);
         #10;
+
+        sym = 3'b110;
+        #10;
+        $display("sym %b -> direction %b", sym, direction);
+        #10;
+
+        sym = 3'b111;
+        #10;
+        $display("sym %b -> direction %b", sym, direction);
+        #10;
     end
 end
 
