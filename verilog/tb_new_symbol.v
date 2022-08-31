@@ -40,6 +40,14 @@ initial begin
         sym = 3'b101;
         #10;
         $display("sym %b -> new sym %b", sym, new_sym);
+        #10;
+        sym = 3'b110;
+        #10;
+        $display("sym %b -> new sym %b", sym, new_sym);
+        #10;
+        sym = 3'b111;
+        #10;
+        $display("sym %b -> new sym %b", sym, new_sym);
     end
 end
 

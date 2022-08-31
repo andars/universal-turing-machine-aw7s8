@@ -11,17 +11,221 @@ module new_symbol_PROJECT_ID(
 
 wire a,b,c,d,e,f,g,h;
 
-assign a = state_in[0];
-assign b = state_in[1];
-assign c = state_in[2];
-assign d = state_in[3];
-assign e = state_in[4];
-assign f = state_in[5];
-assign g = state_in[6];
-assign h = state_in[7];
+wire [2:0] sym_in;
+assign sym_in = {s2, s1, s0};
 
-assign z2 = ((~s2) & b) | (d & s0) | c | (e & (s0 | s1)) | (f & (~(s2 | s1)));
-assign z1 = (a & (~s2)) | (d & (s2 | s1) & (~s0)) | (e & s2 & (~s0));
-assign z0 = (s0 & ((a & s2) | (~a))) | (h & s1);
+reg [2:0] new_symbol;
+
+always @(*) begin
+    new_symbol = 3'b000;
+    /* verilator lint_off CASEINCOMPLETE */
+    case (state_in)
+        8'h01: begin
+            case (sym_in)
+            3'b000: begin
+                new_symbol = 3'b010;
+            end
+            3'b001: begin
+                new_symbol = 3'b010;
+            end
+            3'b010: begin
+                new_symbol = 3'b010;
+            end
+            3'b100: begin
+                new_symbol = 3'b000;
+            end
+            3'b101: begin
+                new_symbol = 3'b001;
+            end
+            3'b110: begin
+                new_symbol = 3'b001;
+            end
+            3'b111: begin
+                new_symbol = 3'b111;
+            end
+            endcase
+        end
+        8'h02: begin
+            case (sym_in)
+            3'b000: begin
+                new_symbol = 3'b100;
+            end
+            3'b001: begin
+                new_symbol = 3'b101;
+            end
+            3'b010: begin
+                new_symbol = 3'b100;
+            end
+            3'b100: begin
+                new_symbol = 3'b000;
+            end
+            3'b101: begin
+                new_symbol = 3'b001;
+            end
+            3'b110: begin
+                new_symbol = 3'b110;
+            end
+            3'b111: begin
+                new_symbol = 3'b110;
+            end
+            endcase
+        end
+        8'h04: begin
+            case (sym_in)
+            3'b000: begin
+                new_symbol = 3'b100;
+            end
+            3'b001: begin
+                new_symbol = 3'b101;
+            end
+            3'b010: begin
+                new_symbol = 3'b100;
+            end
+            3'b100: begin
+                new_symbol = 3'b100;
+            end
+            3'b101: begin
+                new_symbol = 3'b101;
+            end
+            3'b110: begin
+                new_symbol = 3'b110;
+            end
+            3'b111: begin
+                new_symbol = 3'b110;
+            end
+            endcase
+        end
+        8'h08: begin
+            case (sym_in)
+            3'b000: begin
+                new_symbol = 3'b000;
+            end
+            3'b001: begin
+                new_symbol = 3'b101;
+            end
+            3'b010: begin
+                new_symbol = 3'b010;
+            end
+            3'b100: begin
+                new_symbol = 3'b010;
+            end
+            3'b101: begin
+                new_symbol = 3'b101;
+            end
+            3'b110: begin
+                new_symbol = 3'b110;
+            end
+            3'b111: begin
+                new_symbol = 3'b111;
+            end
+            endcase
+        end
+        8'h10: begin
+            case (sym_in)
+            3'b000: begin
+                new_symbol = 3'b000;
+            end
+            3'b001: begin
+                new_symbol = 3'b101;
+            end
+            3'b010: begin
+                new_symbol = 3'b100;
+            end
+            3'b100: begin
+                new_symbol = 3'b100;
+            end
+            3'b101: begin
+                new_symbol = 3'b101;
+            end
+            3'b110: begin
+                new_symbol = 3'b111;
+            end
+            3'b111: begin
+                new_symbol = 3'b111;
+            end
+            endcase
+        end
+        8'h20: begin
+            case (sym_in)
+            3'b000: begin
+                new_symbol = 3'b100;
+            end
+            3'b001: begin
+                new_symbol = 3'b101;
+            end
+            3'b010: begin
+                new_symbol = 3'b100;
+            end
+            3'b100: begin
+                new_symbol = 3'b000;
+            end
+            3'b101: begin
+                new_symbol = 3'b001;
+            end
+            3'b110: begin
+                new_symbol = 3'b110;
+            end
+            3'b111: begin
+                new_symbol = 3'b110;
+            end
+            endcase
+        end
+        8'h40: begin
+            case (sym_in)
+            3'b000: begin
+                new_symbol = 3'b000;
+            end
+            3'b001: begin
+                new_symbol = 3'b001;
+            end
+            3'b010: begin
+                new_symbol = 3'b000;
+            end
+            3'b100: begin
+                new_symbol = 3'b000;
+            end
+            3'b101: begin
+                new_symbol = 3'b001;
+            end
+            3'b110: begin
+                new_symbol = 3'b110;
+            end
+            3'b111: begin
+                new_symbol = 3'b111;
+            end
+            endcase
+        end
+        8'h80: begin
+            case (sym_in)
+            3'b000: begin
+                new_symbol = 3'b000;
+            end
+            3'b001: begin
+                new_symbol = 3'b001;
+            end
+            3'b010: begin
+                new_symbol = 3'b001;
+            end
+            3'b100: begin
+                new_symbol = 3'b000;
+            end
+            3'b101: begin
+                new_symbol = 3'b001;
+            end
+            3'b110: begin
+                new_symbol = 3'b110;
+            end
+            3'b111: begin
+                new_symbol = 3'b001;
+            end
+            endcase
+        end
+    endcase
+    /* verilator lint_on CASEINCOMPLETE */
+end
+
+assign z2 = new_symbol[2];
+assign z1 = new_symbol[1];
+assign z0 = new_symbol[0];
 
 endmodule
