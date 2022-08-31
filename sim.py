@@ -64,11 +64,13 @@ def run(states, transitions):
 
         if pos < 0:
             print("halt")
+            print_machine(i, state, pos)
             break
 
         if next_state:
             if next_state == 'h':
                 print('halt')
+                print_machine(i, 'h', pos)
                 return
             print('{}: {} => {}'.format(sym, state, next_state))
             state = next_state
