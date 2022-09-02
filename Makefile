@@ -1,6 +1,6 @@
 # derived from https://github.com/mattvenn/wokwi-verilog-gds-test/blob/main/Makefile
 
-WOKWI_PROJECT_ID=341174563322724948
+WOKWI_PROJECT_ID=341717091617866324
 
 VERILOG_FILES = core.v direction.v next_state.v new_symbol.v decoder_3to8.v encoder_8to3.v user_module.v
 SOURCE_VERILOG_FILES = $(patsubst %.v,verilog/%.v,$(VERILOG_FILES))
